@@ -311,3 +311,43 @@ ACTION_FUNCTIONS = {
     "ASSIT": lambda : print('OOPS'),
     "ATTACK": combat_action_attack
 }
+
+def list_character_menu():
+  pass
+
+def create_character_menu():
+  toon = Player()
+  # attributes, race, class, skills, feats, equipment, flair
+  create_attribute(toon)
+
+def create_attribute(toon):
+  points = 27
+  done = False
+  while not done:
+    valid = False
+    while not valid:
+      print("ATTRIBUTE SELECTION")
+      print(f"STRENGTH:     {toon.character_attributes["STR"]}")
+      print(f"DEXTERITY:    {toon.character_attributes["DEX"]}")
+      print(f"CONSTITUTION: {toon.character_attributes["CON"]}")
+      print(f"WISDOM:       {toon.character_attributes["WIS"]}")
+      print(f"INTELIGENCE:  {toon.character_attributes["INT"]}")
+      print(f"CHARISMA:     {toon.character_attributes["CHA"]}")
+      print()
+      print("Select an action")
+      print("1) Increase Attribute")
+      print("2) Decrease Attribute")
+      print("3) Done")
+      userInput = input(": ")
+      if userInput.isdecimal() and 1 <= int(userInput) <= 3:
+        valid = True
+      else:
+        print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - 3")
+    # TODO: Update to include two input variables so that the information can be combined.
+    match userInput:
+      case "1":
+        
+      case "2":
+    
+      case "3":
+        done = True

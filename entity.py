@@ -45,12 +45,12 @@ class NPC(Entity):
         # TODO - POSSIBLY add taunt in the future
 
         self.character_attributes = {
-            "STR": 10,
-            "DEX": 10,
-            "CON": 10,
-            "INT": 10,
-            "WIS": 10,
-            "CHA": 10
+            "STR": 8,
+            "DEX": 8,
+            "CON": 8,
+            "INT": 8,
+            "WIS": 8,
+            "CHA": 8
         }
         self.character_totalHP = 10
         self.character_currentHP = 10
