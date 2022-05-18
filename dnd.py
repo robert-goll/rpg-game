@@ -327,27 +327,106 @@ def create_attribute(toon):
     valid = False
     while not valid:
       print("ATTRIBUTE SELECTION")
-      print(f"STRENGTH:     {toon.character_attributes["STR"]}")
-      print(f"DEXTERITY:    {toon.character_attributes["DEX"]}")
-      print(f"CONSTITUTION: {toon.character_attributes["CON"]}")
-      print(f"WISDOM:       {toon.character_attributes["WIS"]}")
-      print(f"INTELIGENCE:  {toon.character_attributes["INT"]}")
-      print(f"CHARISMA:     {toon.character_attributes["CHA"]}")
+      print(f"Points Total: {points}")
+      print(f"STRENGTH:     {toon.character_attributes['STR']}")
+      print(f"DEXTERITY:    {toon.character_attributes['DEX']}")
+      print(f"CONSTITUTION: {toon.character_attributes['CON']}")
+      print(f"WISDOM:       {toon.character_attributes['WIS']}")
+      print(f"INTELIGENCE:  {toon.character_attributes['INT']}")
+      print(f"CHARISMA:     {toon.character_attributes['CHA']}")
       print()
       print("Select an action")
       print("1) Increase Attribute")
       print("2) Decrease Attribute")
       print("3) Done")
-      userInput = input(": ")
-      if userInput.isdecimal() and 1 <= int(userInput) <= 3:
+      menuMode = input(": ")
+      if menuMode.isdecimal() and 1 <= int(menuMode) <= 3:
         valid = True
       else:
-        print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - 3")
-    # TODO: Update to include two input variables so that the information can be combined.
-    match userInput:
+        print(f"ERROR: '{menuMode}' is not a valid response. Please enter a number 1 - 3")
+    if menuMode != "3":
+      valid = False
+      while not valid:
+        print("ATTRIBUTE SELECTION")
+        print("1) STRENGTH")
+        print("2) DEXTERITY")
+        print("3) CONSTITUTION")
+        print("4) WISDOM")
+        print("5) INTELIGENCE")
+        print("6) CHARISMA")
+        selAtt = input(": ")
+        if selAtt.isdecimal() and 1 <= int(selAtt) <= 6:
+          valid = True
+        else:
+          print(f"ERROR: '{selAtt}' is not a valid response. Please enter a number 1 - 6")
+      valid = False
+      while not valid:
+        print("Please enter a valid Attribute score between 8 - 15:")
+        actualAtt = input(": ")
+        if actualAtt.isdecimal() and 8 <= int(actualAtt) <= 15:
+          valid = True
+        else:
+          print(f"ERROR: '{actualAtt}' is not a valid response. Please enter a number 8 - 15")
+    else:
+      actualAtt = 0
+      selAtt = None
+    pointCost = 0
+    actualAtt = int(actualAtt)
+    match selAtt:
       case "1":
-        
+        selAtt = "STR"
       case "2":
-    
+        selAtt = "DEX"
       case "3":
-        done = True
+        selAtt = "CON"
+      case "4":
+        selAtt = "WIS"
+      case "5":
+        selAtt = "INT"
+      case "6":
+        selAtt = "CHA"
+      case _:
+        pass
+    match menuMode:
+      case "1":
+        if actualAtt > toon.character_attributes[selAtt]:
+          print("increase stat")
+          if actualAtt > 13:
+            pointCost += (actualAtt - 13) * 2
+          pointCost += (actualAtt  - pointCost//2) - toon.character_attributes[selAtt]
+          if pointCost <= points:
+            points -= pointCost
+            toon.character_attributes[selAtt] = actualAtt
+          else:
+            print(f"ERROR: The cost to increase {selAtt} to {actualAtt} is too high!")  
+        else:
+          print(f"ERROR: Please enter a score higher than {toon.character_attributes[selAtt]} for {selAtt}!")
+
+      case "2":
+        if actualAtt < toon.character_attributes[selAtt]:
+          print("decrease stat")
+          if toon.character_attributes[selAtt] > 13:
+            pointCost += (toon.character_attributes[selAtt] - 13) * 2
+            toon.character_attributes[selAtt] -= (toon.character_attributes[selAtt] - 13)
+          pointCost += toon.character_attributes[selAtt] - actualAtt
+          points += pointCost
+          toon.character_attributes[selAtt] = actualAtt
+        else:
+          print(f"ERROR: Please enter a score less than {toon.character_attributes} for {selAtt}!")
+      case "3":
+        if points > 0:
+          valid = False
+          confirm = None
+          while not valid:
+            print(f"WARNING: You still have {points} points remaining! Are you sure you're done?")
+            print("1) Yes")
+            print("2) No")
+            confirm = input(": ")
+            if confirm.isdecimal() and 1 <= int(confirm) <= 2:
+              valid = True
+            else:
+              print(f"ERROR: '{confirm}' is not a valid response. Please enter a number 1 - 2")
+          if confirm == "1":
+              done = True
+        else:
+          done = True
