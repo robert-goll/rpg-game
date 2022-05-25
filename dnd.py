@@ -1,6 +1,6 @@
 import copy
 from utils import *
-from entity import Entity,NPC,Player,Gear,Weapon
+from entity import *
 from random import choice
 
 
@@ -319,6 +319,8 @@ def create_character_menu():
   toon = Player()
   # attributes, race, class, skills, feats, equipment, flair
   create_attribute(toon)
+  choose_race(toon)
+  return toon
 
 def create_attribute(toon):
   points = 27
@@ -430,3 +432,50 @@ def create_attribute(toon):
               done = True
         else:
           done = True
+
+def choose_race(toon):
+  done = False
+  race_keys = RACES.keys()
+  selected_race = None
+  while not done:
+    valid = False
+    while not valid:
+      print("RACE SELECTION")
+      count = 0
+      for k in race_keys:
+        count += 1
+        print(f"{count}) {RACES[k]['name']}")
+      print("Please select your race.")
+      userInput = input(": ")
+      if userInput.isdecimal() and 1 <= int(userInput) <= count:
+        valid = True
+        selected_race = k
+      else:
+        print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - {count}")
+    valid = False
+    while not valid:
+      print("RACE CONFIRMATION")
+      print()
+      print(f"NAME: {RACES[selected_race]['name']}")
+      str = RACES[selected_race]['attributes'][0]
+      dex = RACES[selected_race]['attributes'][1]
+      con = RACES[selected_race]['attributes'][2]
+      int = RACES[selected_race]['attributes'][3]
+      wis = RACES[selected_race]['attributes'][4]
+      cha = RACES[selected_race]['attributes'][5]
+      print(f"ATTRIBUTES: STR:{str},DEX:{dex},CON:{con},INT:{int},WIS:{wis},CHA:{cha} ")
+      print()
+      print("Please confirm your choice.")
+      print("1) Yes")
+      print("2) No")
+      userInput = input(": ")
+      if userInput.isdecimal() and 1 <= int(userInput) <= 2:
+        valid = True
+        toon.character_attributes['STR'] += str
+        toon.character_attributes['DEX'] += dex
+        toon.character_attributes['CON'] += con
+        toon.character_attributes['INT'] += int
+        toon.character_attributes['WIS'] += wis
+        toon.character_attributes['CHA'] += cha
+      else:
+        print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - 2")

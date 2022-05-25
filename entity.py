@@ -4,20 +4,30 @@ class Entity():
     pass
 
 
-races = {
+RACES = {
     'human': {
         'name': 'Human',
-        'attributes': [0, 0, 0, 0, 0, 0],
+        'attributes': [1, 1, 1, 1, 1, 1],
         'features': 0
     },
     'elf': {
         'name': 'Elf',
-        'attributes': [0, 2, 0, 0, 1, 0],
+        'attributes': [0, 2, 0, 1, 0, 0],
+        'features': 0
+    },
+    'dwarf': {
+        'name': 'Dwarf',
+        'attributes': [2, 0, 2, 0, 0, 0],
+        'features': 0
+    },
+    'halfling': {
+        'name': 'Halfling',
+        'attributes': [0, 2, 1, 0, 0, 0],
         'features': 0
     }
 }
 
-classes = {
+CLASSES = {
     'fighter': {
         'name': 'Fighter',
         'features': 0

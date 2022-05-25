@@ -6,6 +6,7 @@ CURRENT_CHARACTERS = []
 
 if __name__ == '__main__':
   done = False
+  temp = None
   while not done:
     valid = False
     while not valid:
@@ -26,7 +27,7 @@ if __name__ == '__main__':
           print("option2")
         case "3":
           print("option3")
-          create_character_menu()
+          temp = create_character_menu()
         case "4":
           done = True
         case _:
