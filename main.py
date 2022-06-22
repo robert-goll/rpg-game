@@ -3,6 +3,12 @@ from dnd import *
 from test_adventure import *
 
 CURRENT_CHARACTERS = []
+player = None
+
+def test_story(player):
+  nodes = input_story("test_adventure.txt")
+  story = build_story(nodes)
+  story.resolve(player)
 
 if __name__ == '__main__':
   done = False
@@ -25,17 +31,25 @@ if __name__ == '__main__':
           print("option1")
         case "2":
           print("option2")
+          if player:
+            test_story(player)
+          else:
+            print("error, make a character first")
         case "3":
           print("option3")
-          create_character_menu()
+          player = create_character_menu()
         case "4":
           done = True
         case _:
           print("ERROR")
   print("...closing game... thanks for playing...")
       
+
+
+
+
 '''
-  nodes = input_story("test_adventure.txt")
+
   #print(nodes)
   player = Player()
   player.character_name = "Zap Branigan"
@@ -72,7 +86,5 @@ if __name__ == '__main__':
   player.character_gear[sword.gear_type].append(sword)
 
   # story = build_test_adventure()
-  story = build_story(nodes)
-  print(sys.version_info)
-  story.resolve(player)
+  
 '''
