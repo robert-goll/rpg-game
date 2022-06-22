@@ -27,7 +27,7 @@ if __name__ == '__main__':
           print("option2")
         case "3":
           print("option3")
-          temp = create_character_menu()
+          create_character_menu()
         case "4":
           done = True
         case _:

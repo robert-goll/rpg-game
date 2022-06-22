@@ -30,11 +30,33 @@ RACES = {
 CLASSES = {
     'fighter': {
         'name': 'Fighter',
-        'features': 0
+        'features': {
+          "1" : ["Second Wind"],
+          "3" : ["Extra Attack"],
+          "5" : ["Extra Attack"],
+          "7" : [],
+          "9" : ["Indomitable"],
+          "11" : ["Extra Attack"],
+          "13" : [],
+          "15" : [],
+          "17" : [],
+          "19" : ["Extra Attack"]
+        }
     },
     'wizard': {
         'name': 'Wizard',
-        'features': 0
+        'features': {
+          "1" : ["Magic Missile","Acid Splash"],
+          "3" : ["Invisibility"],
+          "5" : ["Fireball"],
+          "7" : [],
+          "9" : [],
+          "11" : [],
+          "13" : [],
+          "15" : [],
+          "17" : [],
+          "19" : ["Greater Wish"]
+        }
     }
 }
 

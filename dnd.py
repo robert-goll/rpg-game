@@ -304,13 +304,16 @@ def show_battlefield(initiative_order,battlefield):
     print(" - - - - - - - - - - - - - - - -")
 
    
-ACTION_FUNCTIONS = {
-    "MOVE": combat_action_move,
-    "INTERACT": lambda : print('OOPS'),
-    "EVADE": lambda : print('OOPS'),
-    "ASSIT": lambda : print('OOPS'),
-    "ATTACK": combat_action_attack
-}
+
+
+def combat_action_magic_missile():
+  pass
+
+def combat_action_extra_attack():
+  pass
+
+def combat_action_acid_splash():
+  pass
 
 def list_character_menu():
   pass
@@ -320,7 +323,7 @@ def create_character_menu():
   # attributes, race, class, skills, feats, equipment, flair
   create_attribute(toon)
   choose_race(toon)
-  return toon
+  choose_class(toon)
 
 def create_attribute(toon):
   points = 27
@@ -460,10 +463,10 @@ def choose_race(toon):
       str = RACES[selected_race]['attributes'][0]
       dex = RACES[selected_race]['attributes'][1]
       con = RACES[selected_race]['attributes'][2]
-      int = RACES[selected_race]['attributes'][3]
+      inte = RACES[selected_race]['attributes'][3]
       wis = RACES[selected_race]['attributes'][4]
       cha = RACES[selected_race]['attributes'][5]
-      print(f"ATTRIBUTES: STR:{str},DEX:{dex},CON:{con},INT:{int},WIS:{wis},CHA:{cha} ")
+      print(f"ATTRIBUTES: STR:{str},DEX:{dex},CON:{con},INT:{inte},WIS:{wis},CHA:{cha} ")
       print()
       print("Please confirm your choice.")
       print("1) Yes")
@@ -471,11 +474,60 @@ def choose_race(toon):
       userInput = input(": ")
       if userInput.isdecimal() and 1 <= int(userInput) <= 2:
         valid = True
+        done = True
         toon.character_attributes['STR'] += str
         toon.character_attributes['DEX'] += dex
         toon.character_attributes['CON'] += con
-        toon.character_attributes['INT'] += int
+        toon.character_attributes['INT'] += inte
         toon.character_attributes['WIS'] += wis
         toon.character_attributes['CHA'] += cha
       else:
         print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - 2")
+
+def choose_class(toon):
+  done = False
+  class_keys = CLASSES.keys()
+  selected_class = None
+  while not done:
+    valid = False
+    while not valid:
+      print("CLASS SELECTION")
+      count = 0
+      for k in class_keys:
+        count += 1
+        print(f"{count}) {CLASSES[k]['name']}")
+      print("Please select your class.")
+      userInput = input(": ")
+      if userInput.isdecimal() and 1 <= int(userInput) <= count:
+        valid = True
+        selected_class = k
+      else:
+        print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - {count}")
+    valid = False
+    while not valid:
+      print("CLASS CONFIRMATION")
+      print()
+      print(f"NAME: {CLASSES[selected_class]['name']}")
+      print()
+      print("Please confirm your choice.")
+      print("1) Yes")
+      print("2) No")
+      userInput = input(": ")
+      if userInput.isdecimal() and 1 <= int(userInput) <= 2:
+        valid = True
+        done = True
+        toon.character_class.append(selected_class)
+        toon.combat_actions.extend(CLASSES[selected_class]["features"]["1"])
+      else:
+        print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - 2")
+
+ACTION_FUNCTIONS = {
+    "MOVE": combat_action_move,
+    "INTERACT": lambda : print('OOPS'),
+    "EVADE": lambda : print('OOPS'),
+    "ASSIT": lambda : print('OOPS'),
+    "ATTACK": combat_action_attack,
+    "MAGIC MISSILE": combat_action_magic_missile,
+    "EXTRA ATTACK": combat_action_extra_attack,
+    "ACID SPLASH": combat_action_acid_splash
+}
