@@ -41,7 +41,8 @@ CLASSES = {
           "15" : [],
           "17" : [],
           "19" : ["Extra Attack"]
-        }
+        },
+        'hitdie': '1d10'
     },
     'wizard': {
         'name': 'Wizard',
@@ -56,7 +57,8 @@ CLASSES = {
           "15" : [],
           "17" : [],
           "19" : ["Greater Wish"]
-        }
+        },
+        'hitdie': '1d6'
     }
 }
 

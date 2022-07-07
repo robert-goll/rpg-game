@@ -48,13 +48,13 @@ def combat_encounter(friendly,hostile):
                             gear = item
                             break
                 action = temp_action[0]
-                ACTION_FUNCTIONS[action](combatant,target,friendly,hostile,battlefield,gear)
+                ACTION_FUNCTIONS[action.upper()](combatant,target,friendly,hostile,battlefield,gear)
             else:
                 action = "ATTACK"
                 target = choice(friendly)
                 temp_action = action.split('-')
                 gear = combatant.character_gear["COMBAT"][0]
-                ACTION_FUNCTIONS[action](combatant,target,friendly,hostile,battlefield,gear)
+                ACTION_FUNCTIONS[action.upper()](combatant,target,friendly,hostile,battlefield,gear)
             input("...press enter to continue...")
             combat_cleanup(initiative_order,friendly,hostile)
             status = combat_check_resolve(friendly,hostile)
@@ -337,7 +337,7 @@ def create_attribute(toon):
 
 def choose_race(toon):
   done = False
-  race_keys = RACES.keys()
+  race_keys = list(RACES.keys())
   selected_race = None
   while not done:
     valid = False
@@ -351,7 +351,7 @@ def choose_race(toon):
       userInput = input(": ")
       if userInput.isdecimal() and 1 <= int(userInput) <= count:
         valid = True
-        selected_race = k
+        selected_race = race_keys[int(userInput)-1]
       else:
         print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - {count}")
     valid = False
@@ -385,7 +385,7 @@ def choose_race(toon):
 
 def choose_class(toon):
   done = False
-  class_keys = CLASSES.keys()
+  class_keys = list(CLASSES.keys())
   selected_class = None
   while not done:
     valid = False
@@ -399,7 +399,7 @@ def choose_class(toon):
       userInput = input(": ")
       if userInput.isdecimal() and 1 <= int(userInput) <= count:
         valid = True
-        selected_class = k
+        selected_class = class_keys[int(userInput)-1]
       else:
         print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - {count}")
     valid = False
@@ -415,8 +415,12 @@ def choose_class(toon):
       if userInput.isdecimal() and 1 <= int(userInput) <= 2:
         valid = True
         done = True
-        toon.character_class.append(selected_class)
+        toon.character_class.append(CLASSES[selected_class]['name'])
+        toon.character_level.append(1)
         toon.combat_actions.extend(CLASSES[selected_class]["features"]["1"])
+        count,sides = CLASSES[selected_class]['hitdie'].split('d')
+        toon.character_totalHP = rollSum(int(count),int(sides)) + toon.getAttributeModifier('CON')+20
+        toon.character_currentHP = toon.character_totalHP
       else:
         print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - 2")
 

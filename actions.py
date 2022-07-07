@@ -93,7 +93,8 @@ def combat_action_attack(combatant, target, friendly, hostile, battlefield, gear
         
         
 def combat_action_magic_missile(combatant, target, friendly, hostile, battlefield, gear):
-    mod = 3+(combatant.character_level//3)
+    index = combatant.character_class.index("Wizard")
+    mod = 3+(combatant.character_level[index]//3)
     damage = rollSum(mod,4) + mod
     target.change_HP(-damage)
     if target.character_name != "": 
