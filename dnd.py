@@ -34,33 +34,57 @@ def combat_encounter(friendly,hostile):
     status = None
     while not done:
         for combatant in initiative_order:
-            show_initiative(initiative_order,combatant)
-            show_battlefield(initiative_order,battlefield)
-            if isinstance(combatant, Player):  # <class 'entity.Player'>:
-                action = combat_action_menu(combatant)
-                target = combat_target_menu(combatant,initiative_order)
-                temp_action = action.split('-')
-                gear = None
-                if len(temp_action) > 1:
-                    gear_description = temp_action[1]
-                    for item in combatant.character_gear["COMBAT"]:
-                        if item.description == gear_description:
-                            gear = item
-                            break
-                action = temp_action[0]
-                ACTION_FUNCTIONS[action.upper()](combatant,target,friendly,hostile,battlefield,gear)
-            else:
-                action = "ATTACK"
-                target = choice(friendly)
-                temp_action = action.split('-')
-                gear = combatant.character_gear["COMBAT"][0]
-                ACTION_FUNCTIONS[action.upper()](combatant,target,friendly,hostile,battlefield,gear)
-            input("...press enter to continue...")
-            combat_cleanup(initiative_order,friendly,hostile)
-            status = combat_check_resolve(friendly,hostile)
-            if status != "continue":
-                done = True
-                break
+            action_pool = combatant.action_count
+            attack_pool = combatant.attack_count
+            current_action_count = 0
+            currrent_attack_count = 0
+            while current_action_count < action_pool and currrent_attack_count < attack_pool:
+                show_initiative(initiative_order,combatant)
+                show_battlefield(initiative_order,battlefield)
+                if isinstance(combatant, Player):  # <class 'entity.Player'>:
+                    action = combat_action_menu(combatant)
+                    target = combat_target_menu(combatant,initiative_order)
+                    temp_action = action.split('-')
+                    gear = None
+                    if len(temp_action) > 1:
+                        gear_description = temp_action[1]
+                        for item in combatant.character_gear["COMBAT"]:
+                            if item.description == gear_description:
+                                gear = item
+                                break
+                    action = temp_action[0]
+                    if action.upper() in ACTION_FUNCTIONS['GENERIC'].keys():
+                        if current_action_count < action_pool:
+                            current_action_count += 1
+                            ACTION_FUNCTIONS['GENERIC'][action.upper()](combatant,target,friendly,hostile,battlefield,gear)
+                        else:
+                            print("You have not action points remaining!")
+                    elif action.upper() in ACTION_FUNCTIONS['ATTACK'].keys():
+                        if current_attack_count < attack_pool or current_action_count < action_pool:
+                            if current_attack_count < attack_pool:
+                                current_attack_count += 1
+                            else:
+                                current_action_count += 1
+                            ACTION_FUNCTIONS['ATTACK'][action.upper()](combatant,target,friendly,hostile,battlefield,gear)
+                        else:
+                            print("You have not attack points remaining!")
+                    else:
+                        print("That action doesn't exist!")
+                    
+                else:
+                    action = "ATTACK"
+                    target = choice(friendly)
+                    temp_action = action.split('-')
+                    gear = combatant.character_gear["COMBAT"][0]
+                    ACTION_FUNCTIONS['ATTACK'][action.upper()](combatant,target,friendly,hostile,battlefield,gear)
+                    break
+    #TODO - Check why they input prompt is not showing after the enemy attacks; e.g. skipping directly to the player's turn.
+                input("...press enter to continue...")
+                combat_cleanup(initiative_order,friendly,hostile)
+                status = combat_check_resolve(friendly,hostile)
+                if status != "continue":
+                    done = True
+                    break
     if status == "player_won":
         return True
     else:
@@ -222,6 +246,7 @@ def create_character_menu():
   create_attribute(toon)
   choose_race(toon)
   choose_class(toon)
+  toon.attack_count = 3
   return toon
 
 def create_attribute(toon):

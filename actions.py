@@ -118,12 +118,16 @@ def combat_action_acid_splash():
 #  ...
 
 ACTION_FUNCTIONS = {
-    "MOVE": combat_action_move,
-    "INTERACT": lambda : print('OOPS'),
-    "EVADE": lambda : print('OOPS'),
-    "ASSIT": lambda : print('OOPS'),
-    "ATTACK": combat_action_attack,
-    "MAGIC MISSILE": combat_action_magic_missile,
-    "EXTRA ATTACK": combat_action_extra_attack,
-    "ACID SPLASH": combat_action_acid_splash
+    "GENERIC": {
+        "MOVE": combat_action_move,
+        "INTERACT": lambda : print('OOPS'),
+        "EVADE": lambda : print('OOPS'),
+        "ASSIT": lambda : print('OOPS')
+        },
+    "ATTACK": {
+        "ATTACK": combat_action_attack,
+        "MAGIC MISSILE": combat_action_magic_missile,
+        "EXTRA ATTACK": combat_action_extra_attack,
+        "ACID SPLASH": combat_action_acid_splash
+        }
 }

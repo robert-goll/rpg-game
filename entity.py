@@ -105,6 +105,9 @@ class NPC(Entity):
             "TRINKET": [],
             "COMBAT": []
         }
+        
+        self.attack_count = 1
+        self.action_count = 1
 
     def getAttributeModifier(self, attribute):
         return (self.character_attributes[attribute] - 10) // 2
