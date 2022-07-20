@@ -37,8 +37,8 @@ def combat_encounter(friendly,hostile):
             action_pool = combatant.action_count
             attack_pool = combatant.attack_count
             current_action_count = 0
-            currrent_attack_count = 0
-            while current_action_count < action_pool and currrent_attack_count < attack_pool:
+            current_attack_count = 0
+            while current_action_count < action_pool or current_attack_count < attack_pool:
                 show_initiative(initiative_order,combatant)
                 show_battlefield(initiative_order,battlefield)
                 if isinstance(combatant, Player):  # <class 'entity.Player'>:
@@ -58,7 +58,7 @@ def combat_encounter(friendly,hostile):
                             current_action_count += 1
                             ACTION_FUNCTIONS['GENERIC'][action.upper()](combatant,target,friendly,hostile,battlefield,gear)
                         else:
-                            print("You have not action points remaining!")
+                            print("You have no action points remaining!")
                     elif action.upper() in ACTION_FUNCTIONS['ATTACK'].keys():
                         if current_attack_count < attack_pool or current_action_count < action_pool:
                             if current_attack_count < attack_pool:
@@ -67,7 +67,7 @@ def combat_encounter(friendly,hostile):
                                 current_action_count += 1
                             ACTION_FUNCTIONS['ATTACK'][action.upper()](combatant,target,friendly,hostile,battlefield,gear)
                         else:
-                            print("You have not attack points remaining!")
+                            print("You have no attack points remaining!")
                     else:
                         print("That action doesn't exist!")
                     
@@ -77,7 +77,8 @@ def combat_encounter(friendly,hostile):
                     temp_action = action.split('-')
                     gear = combatant.character_gear["COMBAT"][0]
                     ACTION_FUNCTIONS['ATTACK'][action.upper()](combatant,target,friendly,hostile,battlefield,gear)
-                    break
+                    current_action_count += 1
+                    current_attack_count += 1
     #TODO - Check why they input prompt is not showing after the enemy attacks; e.g. skipping directly to the player's turn.
                 input("...press enter to continue...")
                 combat_cleanup(initiative_order,friendly,hostile)
@@ -246,6 +247,7 @@ def create_character_menu():
   create_attribute(toon)
   choose_race(toon)
   choose_class(toon)
+  # Temp item creation
   toon.attack_count = 3
   return toon
 

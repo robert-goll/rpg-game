@@ -42,7 +42,11 @@ CLASSES = {
           "17" : [],
           "19" : ["Extra Attack"]
         },
-        'hitdie': '1d10'
+        'hitdie': '1d10',
+        'equipment': [
+            (Weapon,'shortsword',('ATTACK'),10,0,'COMBAT','MELEE','1d6'),
+            (Gear,'chainmail',(),75,6,'ARMOR','HEAVY','')
+        ]
     },
     'wizard': {
         'name': 'Wizard',
@@ -116,16 +120,21 @@ class NPC(Entity):
         modifiers = 0
         for armor in self.character_gear["ARMOR"]:
             modifiers += armor.gear_modifier
+            if armor.gear_sub_type == "LIGHT":
+                modifiers += self.getAttributeModifier('DEX') 
+            else: armor.gear_sub_type == "MEDIUM":
+                dex = modifiers += self.getAttributeModifier('DEX') 
+                modifiers += dex if dex < 3 else 2
         for trinket in self.character_gear["TRINKET"]:
-            if trinket.gear_subType == "AC":
+            if trinket.gear_sub_type == "AC":
                 modifiers += trinket.gear_modifier
-        return 8 + self.getAttributeModifier('DEX') + modifiers
+        return 8 + modifiers
 
     def getInitiative(self):
         modifiers = 0
         # TODO = update according to the current character_gear dictionary labels; "trinkets"
         for trinket in self.character_gear["TRINKET"]:
-            if trinket.gear_subType == "initiative":
+            if trinket.gear_sub_type == "initiative":
                 modifiers += trinket.gear_modifier
         return modifiers + rollSum(1, 20)
 
@@ -147,7 +156,7 @@ class Player(NPC):
         NPC.__init__(self)
 
 
-        #TODO - add a way to provide combat actions with gear
+        #TODO - Add armor class to handle them specificaly
 class Gear(Entity):
     def __init__(self):
         Entity.__init__(self)
