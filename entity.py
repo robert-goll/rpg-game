@@ -3,70 +3,6 @@ from utils import *
 class Entity():
     pass
 
-
-RACES = {
-    'human': {
-        'name': 'Human',
-        'attributes': [1, 1, 1, 1, 1, 1],
-        'features': 0
-    },
-    'elf': {
-        'name': 'Elf',
-        'attributes': [0, 2, 0, 1, 0, 0],
-        'features': 0
-    },
-    'dwarf': {
-        'name': 'Dwarf',
-        'attributes': [2, 0, 2, 0, 0, 0],
-        'features': 0
-    },
-    'halfling': {
-        'name': 'Halfling',
-        'attributes': [0, 2, 1, 0, 0, 0],
-        'features': 0
-    }
-}
-
-CLASSES = {
-    'fighter': {
-        'name': 'Fighter',
-        'features': {
-          "1" : ["Second Wind"],
-          "3" : ["Extra Attack"],
-          "5" : ["Extra Attack"],
-          "7" : [],
-          "9" : ["Indomitable"],
-          "11" : ["Extra Attack"],
-          "13" : [],
-          "15" : [],
-          "17" : [],
-          "19" : ["Extra Attack"]
-        },
-        'hitdie': '1d10',
-        'equipment': [
-            (Weapon,'shortsword',('ATTACK'),10,0,'COMBAT','MELEE','1d6'),
-            (Gear,'chainmail',(),75,6,'ARMOR','HEAVY','')
-        ]
-    },
-    'wizard': {
-        'name': 'Wizard',
-        'features': {
-          "1" : ["Magic Missile","Acid Splash"],
-          "3" : ["Invisibility"],
-          "5" : ["Fireball"],
-          "7" : [],
-          "9" : [],
-          "11" : [],
-          "13" : [],
-          "15" : [],
-          "17" : [],
-          "19" : ["Greater Wish"]
-        },
-        'hitdie': '1d6'
-    }
-}
-
-
 # CLASSES FOR ENTITIES
 class NPC(Entity):
     def __init__(self):
@@ -110,6 +46,8 @@ class NPC(Entity):
             "COMBAT": []
         }
         
+        self.gold = 0
+        
         self.attack_count = 1
         self.action_count = 1
 
@@ -122,8 +60,8 @@ class NPC(Entity):
             modifiers += armor.gear_modifier
             if armor.gear_sub_type == "LIGHT":
                 modifiers += self.getAttributeModifier('DEX') 
-            else: armor.gear_sub_type == "MEDIUM":
-                dex = modifiers += self.getAttributeModifier('DEX') 
+            elif armor.gear_sub_type == "MEDIUM":
+                dex = modifiers + self.getAttributeModifier('DEX') 
                 modifiers += dex if dex < 3 else 2
         for trinket in self.character_gear["TRINKET"]:
             if trinket.gear_sub_type == "AC":
@@ -173,4 +111,65 @@ class Weapon(Gear):
         self.damage = ""
         self.actions.append('ATTACK')
 
+RACES = {
+    'human': {
+        'name': 'Human',
+        'attributes': [1, 1, 1, 1, 1, 1],
+        'features': 0
+    },
+    'elf': {
+        'name': 'Elf',
+        'attributes': [0, 2, 0, 1, 0, 0],
+        'features': 0
+    },
+    'dwarf': {
+        'name': 'Dwarf',
+        'attributes': [2, 0, 2, 0, 0, 0],
+        'features': 0
+    },
+    'halfling': {
+        'name': 'Halfling',
+        'attributes': [0, 2, 1, 0, 0, 0],
+        'features': 0
+    }
+}
+
+CLASSES = {
+    'fighter': {
+        'name': 'Fighter',
+        'features': {
+          "1" : ["Second Wind"],
+          "3" : ["Extra Attack"],
+          "5" : ["Extra Attack"],
+          "7" : [],
+          "9" : ["Indomitable"],
+          "11" : ["Extra Attack"],
+          "13" : [],
+          "15" : [],
+          "17" : [],
+          "19" : ["Extra Attack"]
+        },
+        'hitdie': '1d10',
+        'equipment': [
+            (Weapon,'shortsword',10,0,'COMBAT','MELEE','1d6'),
+            (Gear,'chainmail',75,6,'ARMOR','HEAVY','')
+        ]
+    },
+    'wizard': {
+        'name': 'Wizard',
+        'features': {
+          "1" : ["Magic Missile","Acid Splash"],
+          "3" : ["Invisibility"],
+          "5" : ["Fireball"],
+          "7" : [],
+          "9" : [],
+          "11" : [],
+          "13" : [],
+          "15" : [],
+          "17" : [],
+          "19" : ["Greater Wish"]
+        },
+        'hitdie': '1d6'
+    }
+}
 # subtypes: AC, initiative

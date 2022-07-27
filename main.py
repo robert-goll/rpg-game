@@ -8,9 +8,6 @@ player = None
 """
     REMINDERS:
     
-    1) Finished adding in the starting equipment for the FIGHTER class
-    2) We need to actuall add the equipment to the player toon upon 
-        creation.
     3) Introduce a generic purchase system so that the player can make
         decisions about which equipment they want. This can also be used
         in the future to make interactions with vendors more accessible.

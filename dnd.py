@@ -34,6 +34,8 @@ def combat_encounter(friendly,hostile):
     status = None
     while not done:
         for combatant in initiative_order:
+            if status and status != "continue":
+                break
             action_pool = combatant.action_count
             attack_pool = combatant.attack_count
             current_action_count = 0
@@ -42,6 +44,8 @@ def combat_encounter(friendly,hostile):
                 show_initiative(initiative_order,combatant)
                 show_battlefield(initiative_order,battlefield)
                 if isinstance(combatant, Player):  # <class 'entity.Player'>:
+                    # Show remaining actions/attack pools
+                    print(f"Actions Remaining - General: {action_pool-current_action_count}/{action_pool} Attack: {attack_pool-current_attack_count}/{attack_pool}")
                     action = combat_action_menu(combatant)
                     target = combat_target_menu(combatant,initiative_order)
                     temp_action = action.split('-')
@@ -442,12 +446,26 @@ def choose_class(toon):
       if userInput.isdecimal() and 1 <= int(userInput) <= 2:
         valid = True
         done = True
+        #Apply Class/Levels
         toon.character_class.append(CLASSES[selected_class]['name'])
         toon.character_level.append(1)
+        #Apply Actions
         toon.combat_actions.extend(CLASSES[selected_class]["features"]["1"])
         count,sides = CLASSES[selected_class]['hitdie'].split('d')
+        #Apply Hitpoints
         toon.character_totalHP = rollSum(int(count),int(sides)) + toon.getAttributeModifier('CON')+20
         toon.character_currentHP = toon.character_totalHP
+        # Apply Items
+        for _item in CLASSES[selected_class]['equipment']:
+            item = _item[0]()
+            item.description   = _item[1]
+            item.values        = _item[2]
+            item.gear_modifier = _item[3]
+            item.gear_type     = _item[4]
+            item.gear_sub_type = _item[5]
+            if not _item[6] == '':
+                item.damage = _item[6]
+            toon.character_gear[item.gear_type].append(item)
       else:
         print(f"ERROR: '{userInput}' is not a valid response. Please enter a number 1 - 2")
 
